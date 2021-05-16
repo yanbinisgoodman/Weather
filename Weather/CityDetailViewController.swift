@@ -9,11 +9,12 @@ import UIKit
 
 class CityDetailViewController: UIViewController {
     
+    @IBOutlet var backgroundView: UIView!
+    
     @IBOutlet weak var weekForecast: UITableView!
     @IBOutlet weak var tableHight: NSLayoutConstraint!
     @IBOutlet weak var whiteBackgroundView: NSLayoutConstraint!
     @IBOutlet weak var hourlyForecastHeight: NSLayoutConstraint!
-    @IBOutlet weak var scrollViewContentView: UIView!
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -23,6 +24,7 @@ class CityDetailViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //Set up background shapes
         DesignManager.setBackgroundStandartShape(layer: weeklyTableBackground.layer)
@@ -40,13 +42,23 @@ class CityDetailViewController: UIViewController {
         super.updateViewConstraints()
         
         //Set tableview height according to its contents
-        tableHight.constant = weekForecast.contentSize.height
+        //tableHight.constant = weekForecast.contentSize.height
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         whiteBackgroundView.constant = view.frame.height - (hourlyForecastHeight.constant + 60)
+        
+        let gradient = CAGradientLayer()
+        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.endPoint = CGPoint(x: 1.0, y: 0.0)
+        gradient.locations = [NSNumber(floatLiteral: 0.0), NSNumber(floatLiteral: 1.0)]
+        gradient.colors = [UIColor(red: 68/255, green: 166/255, blue: 252/255, alpha: 1).cgColor,
+                                      UIColor(red: 114/255, green: 225/255, blue: 253/255, alpha: 1).cgColor]
+        gradient.frame = backgroundView.bounds
+        
+        backgroundView.layer.insertSublayer(gradient, at: 0)
     }
     
     @IBAction func exitButtonPressed(_ sender: Any) {
